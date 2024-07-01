@@ -138,7 +138,6 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
             self.showAlert(type: .info, withMessage: "this is \(indexPath.row) row")
         } else {
             let track = self.viewModel.localTrackData[indexPath.row]
-            tableView.ce
             self.playMusic(uri: track.uri)
         }
     }
