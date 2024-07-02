@@ -69,7 +69,8 @@ class MusicPlayerVM: ObservableObject, MusicPlayerVMP {
         self._viewState = .loading
         self.localTrackData = TracksSearchModel.localSong.tracks?.items ?? []
         
-        self.getToken()
+        self._viewState = self.isResetTime ? .error(error: nil) : .empty
+        // self.getToken()
     }
     
     func getAuth() {
@@ -112,6 +113,11 @@ class MusicPlayerVM: ObservableObject, MusicPlayerVMP {
                     self?.$onShowError.onNext(err)
                 }.disposed(by: disposeBag)
         }
+    }
+    
+    func updateLocalStorage(accessToken: String) {
+        self.localStorage.setStorage(key: .accessToken(accessToken))
+        self.localStorage.setStorage(key: .resetTime(Date.now.toLocalTime()))
     }
 }
 

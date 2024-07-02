@@ -43,6 +43,14 @@ public class HttpError: Error, Equatable {
                              )
     )
     
+    public static var invalidToken = HttpError(
+        errorBody: ErrorModel(error: true,
+                              status: 401,
+                              message: "Access Token",
+                              description: "Invalid / Expired Token"
+                             )
+    )
+    
     public static func == (lhs: HttpError, rhs: HttpError) -> Bool {
         return lhs.errorBody == rhs.errorBody
     }

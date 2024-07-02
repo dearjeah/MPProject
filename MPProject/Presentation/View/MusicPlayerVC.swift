@@ -14,7 +14,6 @@ import AVFoundation
 class MusicPlayerVC: UIViewController {
     private let disposeBag = DisposeBag()
     lazy var viewModel = MusicPlayerVM(repo: MusicPlayerDefaultRepo())
-    private let localStorage = LocalStorageDefault.shared
     
     private lazy var selectedMusic: IndexPath? = nil
     
@@ -67,7 +66,6 @@ class MusicPlayerVC: UIViewController {
         )
         searchHeader.delegate = self
         self.player.delegate = self
-        
     }
     
     func setupConstraint() {
@@ -96,10 +94,21 @@ class MusicPlayerVC: UIViewController {
                 self.tableView.reloadData()
             }).disposed(by: disposeBag)
         
-        self.viewModel.onShowError.subscribe(
-            onNext: { [weak self] _ in
+        self.viewModel.viewState.subscribe(
+            onNext: { [weak self] viewState in
                 guard let self = self else { return }
-                self.accessCodePrompt()
+//                HttpError.
+                switch viewState {
+                case .error(let err):
+                    if err?.errorBody?.status == 503 || err?.errorBody?.status == 0 {
+                        self.showAlert(type: .error, 
+                                       withMessage: err?.errorBody?.description ?? "Error Occured")
+                    } else {
+                        self.accessCodePrompt()
+                    }
+                default:
+                    return
+                }
             }).disposed(by: disposeBag)
     }
 }
@@ -119,7 +128,7 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
         if section == 0 {
             return self.viewModel.searchData.count
         } else {
-            return 5
+            return self.viewModel.localTrackData.count
         }
     }
     
@@ -196,7 +205,7 @@ extension MusicPlayerVC {
             preferredStyle: .alert
         )
 
-        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         
         self.present(alert,
                      animated: true)
@@ -208,7 +217,7 @@ extension MusicPlayerVC {
             message: """
             Since there is a problem with the API implementation,
             add the access token manually. Please refer to the developer.
-            After you add the access token, please try to search music again. Thank you.
+            After you add the access token, please try to search the tracks. Thank you.
         """,
             preferredStyle: .alert)
         ac.addTextField{ [weak self] (textField) in
@@ -219,13 +228,19 @@ extension MusicPlayerVC {
         
         let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned ac] _ in
             let answer = ac.textFields![0].text
-            self.localStorage.setStorage(key: .accessToken(answer))
-            self.localStorage.setStorage(key: .resetTime(Date.now.toLocalTime()))
+            if answer == "" || answer == " " {
+                self.showAlert(type: .error, withMessage: "Do it properly")
+                self.accessCodePrompt()
+            } else {
+                self.viewModel.updateLocalStorage(accessToken: answer ?? "")
+            }
         }
 
         ac.addAction(submitAction)
 
-        self.present(ac, animated: true)
+        DispatchQueue.main.async {
+            self.present(ac, animated: true, completion: nil)
+        }
     }
 }
 

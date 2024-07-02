@@ -113,7 +113,7 @@ public final class APIClient {
                             decoded.status = decoded.status ?? response.response?.statusCode
                             observer(.error(HttpError(errorBody: decoded)))
                         } catch {
-                            observer(.error(HttpError.networkError))
+                            observer(.error(HttpError.invalidToken))
                         }
                     default:
                         observer(.error(response.error ??
