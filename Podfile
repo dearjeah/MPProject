@@ -11,6 +11,7 @@ end
   
 def debugging_pod
   pod 'netfox'
+  pod 'FLEX'
 end
   
 def layout_pod
@@ -24,11 +25,6 @@ end
 
 def animation_pod
   pod 'lottie-ios'
-end
-
-def debugging_pod
-  pod 'FLEX', :configurations => ['Debug']
-  pod 'netfox', :configurations => ['Debug']
 end
 
 target 'MPProject' do
