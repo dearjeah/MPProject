@@ -11,7 +11,6 @@ import Alamofire
 public enum MusicPlayerAPI: APIConfiguration {
     case getAuth
     case getToken
-    case getTracksList
     case getSearch(q: String)
     
     public var baseURL: String {
@@ -36,8 +35,7 @@ public enum MusicPlayerAPI: APIConfiguration {
         switch self {
         case .getToken:
             return .post
-        case .getTracksList,
-                .getSearch,
+        case .getSearch,
                 .getAuth:
             return .get
         }
@@ -49,8 +47,6 @@ public enum MusicPlayerAPI: APIConfiguration {
             return "/authorize"
         case .getToken:
             return "/token"
-        case .getTracksList:
-            return "/tracks"
         case .getSearch:
             return "/search"
         }
@@ -64,24 +60,21 @@ public enum MusicPlayerAPI: APIConfiguration {
                 "client_id": Constant.clientId,
                 "redirect_uri": Constant.redirect_uri
             ]
-        case .getToken:
-            return ["grant_type": "client_credentials"]
-        case .getTracksList:
-            return [
-                "ids": "client_credentials"
-            ]
+//        case .getToken:
+//            return ["grant_type": "client_credentials"]
         case .getSearch(let query):
             return [
                 "q": query,
                 "type": "track"
             ]
+        default:
+            return [:]
         }
     }
     
     public var parameterEncoding: ParameterEncoding {
         switch self {
         case .getAuth,
-                .getTracksList,
                 .getSearch:
             return URLEncoding(destination: .queryString)
         default:

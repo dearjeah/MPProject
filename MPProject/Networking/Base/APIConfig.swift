@@ -35,11 +35,13 @@ public extension APIConfiguration {
 
     // MARK: shortcuts
     var accessToken: String {
-        "BQABXHOrhQqnVTRrf9GcnkzgGBgoQ1Gj_iNc_I18lml1wwfZjbJ7HthPJlI1kyRU0x7Ug-ILQarcKhqUYRR94fSM0Nf0g8JCZiOBaVsZgWwYW0duabU".utf8EncodedString()
+        let localStorage = LocalStorageDefault.shared
+        let token = localStorage.getStorage(key: .accessToken(nil))
+        return localStorage.stringFromAny(token).utf8EncodedString()
     }
     
     var auth: String {
-        "NDZkNTJlZjQxOTJjNGM1NGEyYmRmMGU4Y2Y3MTExN2I6ZDZkYmVlNmNiYmZiNDk3NWI5MTcyNWNmYmI5Njk0MWU=".utf8EncodedString()
+        Constant.authCode
     }
 
     var baseURLAuth: String {
@@ -69,7 +71,7 @@ public extension APIConfiguration {
        
         let headers = [
             HTTPHeaderField.contentType.rawValue: ContentType.form.rawValue,
-            HTTPHeaderField.authorization.rawValue: "Bearer \(accessToken) " // user accessTokenn
+            HTTPHeaderField.authorization.rawValue: "Bearer \(accessToken)" // user accessTokenn
         ]
 
         return headers
@@ -94,18 +96,17 @@ public extension APIConfiguration {
         }
 
         urlRequest.httpMethod = method.rawValue
-        urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-        
         
         if baseURL == baseURLAuth {
             var requestBodyComponent = URLComponents()
             requestBodyComponent.queryItems = [
-                URLQueryItem(name: "grant_type", value: "authorization_code"),
-                URLQueryItem(name: "redirect_uri", value: "app:///")
+                URLQueryItem(name: "grant_type", value: "client_credentials")
             ]
             urlRequest.allHTTPHeaderFields = authHeader
             urlRequest.httpBody = requestBodyComponent.query?.data(using: .utf8)
             urlRequest.setValue("Basic \(auth)", forHTTPHeaderField: "Authorization")
+        } else {
+            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
         
         print("urlReq", urlRequest)

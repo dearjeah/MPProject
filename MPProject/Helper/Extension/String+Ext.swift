@@ -39,4 +39,9 @@ extension String {
         let text = String(data: messageData!, encoding: .utf8) ?? ""
         return text
     }
+    
+    func toBase64() -> String {
+        return Data(self.utf8).base64EncodedString()
+    }
 }
+

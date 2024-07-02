@@ -11,6 +11,12 @@ import Kingfisher
 import Lottie
 
 class MusicDetailCell: UITableViewCell {
+    lazy var isMusicPlay: Bool = false {
+        didSet {
+            isMusicPlay ? playAnimation() : stopAnimation()
+        }
+    }
+    
     private lazy var musicAnimView = UIView()
     private lazy var musicAnimation: LottieAnimationView = {
         let animation = LottieAnimationView()
@@ -95,6 +101,7 @@ class MusicDetailCell: UITableViewCell {
             songAlbum,
             musicAnimView
         )
+        musicAnimView.isHidden = true
     }
 
     private func setupConstraint() {
@@ -146,11 +153,13 @@ extension MusicDetailCell {
     }
     
     func playAnimation() {
+        musicAnimView.isHidden = false
         musicAnimation.play(fromProgress: 0, toProgress: 1, loopMode: LottieLoopMode.loop)
         musicAnimation.backgroundBehavior = .pauseAndRestore
     }
     
     func stopAnimation() {
+        musicAnimView.isHidden = true
         musicAnimation.stop()
     }
 }

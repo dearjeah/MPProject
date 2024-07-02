@@ -53,7 +53,6 @@
 		BFA0799C2C32EC4C00EFB538 /* Taylor_Swift _Back_To_December.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BFA079972C32EC4C00EFB538 /* Taylor_Swift _Back_To_December.mp3 */; };
 		BFA0799D2C32EC4C00EFB538 /* Ed_Sheeran_Perfect.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BFA079982C32EC4C00EFB538 /* Ed_Sheeran_Perfect.mp3 */; };
 		BFA079A02C32F93600EFB538 /* music_animation.json in Resources */ = {isa = PBXBuildFile; fileRef = BFA0799F2C32F93600EFB538 /* music_animation.json */; };
-		BFA079A32C3305E500EFB538 /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA079A22C3305E500EFB538 /* NotificationCenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,7 +125,6 @@
 		BFA079972C32EC4C00EFB538 /* Taylor_Swift _Back_To_December.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Taylor_Swift _Back_To_December.mp3"; sourceTree = "<group>"; };
 		BFA079982C32EC4C00EFB538 /* Ed_Sheeran_Perfect.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Ed_Sheeran_Perfect.mp3; sourceTree = "<group>"; };
 		BFA0799F2C32F93600EFB538 /* music_animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = music_animation.json; sourceTree = "<group>"; };
-		BFA079A22C3305E500EFB538 /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		C58B4CEEDD8AF1D6C8106B97 /* Pods_MPProjectTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MPProjectTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1870834F4EFCF69697C2ECC /* Pods-MPProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPProjectTests.debug.xcconfig"; path = "Target Support Files/Pods-MPProjectTests/Pods-MPProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DC950F60AC4716F7B2286029 /* Pods_MPProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MPProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,7 +238,6 @@
 		BFA079132C32772500EFB538 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				BFA079A12C3305D500EFB538 /* NotificationCenter */,
 				BFA079142C32773700EFB538 /* LocalStorage */,
 				BFA079152C32773D00EFB538 /* Model */,
 			);
@@ -422,14 +419,6 @@
 				BFA0799F2C32F93600EFB538 /* music_animation.json */,
 			);
 			path = Animation;
-			sourceTree = "<group>";
-		};
-		BFA079A12C3305D500EFB538 /* NotificationCenter */ = {
-			isa = PBXGroup;
-			children = (
-				BFA079A22C3305E500EFB538 /* NotificationCenter.swift */,
-			);
-			path = NotificationCenter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -704,7 +693,6 @@
 				BFA078E62C32761900EFB538 /* SceneDelegate.swift in Sources */,
 				BFA079372C32799E00EFB538 /* HeaderSearchView.swift in Sources */,
 				BFA0794D2C327BB100EFB538 /* PrimitiveSequence+Ext.swift in Sources */,
-				BFA079A32C3305E500EFB538 /* NotificationCenter.swift in Sources */,
 				BFA0793E2C327A0F00EFB538 /* String+Ext.swift in Sources */,
 				BFA0794B2C327B8D00EFB538 /* APIClient.swift in Sources */,
 				BFA0794F2C327BCC00EFB538 /* APIHelper.swift in Sources */,

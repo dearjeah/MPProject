@@ -12,13 +12,10 @@ import AVFoundation
 
 protocol MusicPlayerVMP {
     var viewState: Observable<ViewState> { get }
-    var getTracksData: Observable<[Track]> { get }
     var getSearchData: Observable<[Track]> { get }
     var onReloadTable: Observable<Void> { get }
-//    var onSelectedCell: Observable<RdnHistoryDetail?> { get }
     func requestData()
-    func getAuth()
-    func getTracks()
+//    func getAuth()
     func getSearch(query: String?)
     func refresh()
 }
@@ -26,9 +23,6 @@ protocol MusicPlayerVMP {
 class MusicPlayerVM: ObservableObject, MusicPlayerVMP {
     var viewState: Observable<ViewState> {
         return self.$_viewState.asObservable()
-    }
-    var getTracksData: Observable<[Track]> {
-        return self.$tracksData.asObservable()
     }
     var getSearchData: Observable<[Track]> {
         return self.$searchData.asObservable()
@@ -85,7 +79,6 @@ class MusicPlayerVM: ObservableObject, MusicPlayerVMP {
                 self?.updateLocalStorage(key: .accessToken(data.accessToken))
                 self?.updateLocalStorage(key: .resetTime(Date.now.toLocalTime()))
                 
-                self?.getTracks()
             } onError: { [weak self] err in
                 self?._viewState = .error(error: err as? HttpError)
                 self?.$onShowError.onNext(err)
@@ -99,18 +92,6 @@ class MusicPlayerVM: ObservableObject, MusicPlayerVMP {
                 self?.updateLocalStorage(key: .accessToken(data.accessToken))
                 self?.updateLocalStorage(key: .resetTime(Date.now.toLocalTime()))
                 
-                self?.getTracks()
-            } onError: { [weak self] err in
-                self?._viewState = .error(error: err as? HttpError)
-                self?.$onShowError.onNext(err)
-            }.disposed(by: disposeBag)
-    }
-    
-    func getTracks() {
-        self.repo.getTrackList()
-            .subscribe { [weak self] resp in
-                let data = resp
-                self?.tracksData = resp.tracks ?? []
             } onError: { [weak self] err in
                 self?._viewState = .error(error: err as? HttpError)
                 self?.$onShowError.onNext(err)
@@ -119,12 +100,15 @@ class MusicPlayerVM: ObservableObject, MusicPlayerVMP {
     
     func getSearch(query: String?) {
         if let query = query, query != "", query != " "  {
+            self._viewState = .loading
             self.repo.getSearchTrack(query: query)
                 .subscribe { [weak self] resp in
+                    let data = resp.tracks?.items ?? []
                     self?.searchData = resp.tracks?.items ?? []
+                    
+                    self?._viewState = data.isEmpty ? .empty : .complete
                 } onError: { [weak self] err in
                     self?._viewState = .error(error: err as? HttpError)
-                    print("===error search====", err)
                     self?.$onShowError.onNext(err)
                 }.disposed(by: disposeBag)
         }
@@ -150,14 +134,14 @@ extension MusicPlayerVM {
         
         let difference = formatter.string(from: current, to: remainingTime)?.toDouble ?? 0
         
-        self.setInterval(difference * 60.0)
+        self.setInterval(difference * 30.0)
     }
     
     func getRemainingResetTime() -> Date? {
         if let saved = resetTime {
             let resetTime = Calendar.current.date(
                 byAdding: .minute,
-                value: 60,
+                value: 30,
                 to: saved)!
             return resetTime
         }

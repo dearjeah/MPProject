@@ -41,4 +41,11 @@ struct LocalStorageDefault {
         self.removeLocalStorage(.accessToken(nil))
         self.removeLocalStorage(.resetTime(nil))
     }
+    
+    func stringFromAny(_ value:Any?) -> String {
+        if let nonNil = value, !(nonNil is NSNull) {
+            return String(describing: nonNil)
+        }
+        return ""
+    }
 }

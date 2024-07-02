@@ -14,6 +14,9 @@ import AVFoundation
 class MusicPlayerVC: UIViewController {
     private let disposeBag = DisposeBag()
     lazy var viewModel = MusicPlayerVM(repo: MusicPlayerDefaultRepo())
+    private let localStorage = LocalStorageDefault.shared
+    
+    private lazy var selectedMusic: IndexPath? = nil
     
     private enum AlertType {
         case error
@@ -28,6 +31,7 @@ class MusicPlayerVC: UIViewController {
         let table = UITableView()
         table.rowHeight = UITableView.automaticDimension
         table.separatorStyle = .singleLine
+        table.allowsMultipleSelection = false
         table.tableHeaderView = nil
         table.tableFooterView = nil
         table.sectionHeaderTopPadding = 0
@@ -91,6 +95,12 @@ class MusicPlayerVC: UIViewController {
                 guard let self = self else { return }
                 self.tableView.reloadData()
             }).disposed(by: disposeBag)
+        
+        self.viewModel.onShowError.subscribe(
+            onNext: { [weak self] _ in
+                guard let self = self else { return }
+                self.accessCodePrompt()
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -125,6 +135,7 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
             
         } else {
             let track = self.viewModel.localTrackData[indexPath.row]
+            
             cell.setupData(imgUrl: nil,
                            title: track.name,
                            artist: track.artists?[0].name,
@@ -133,13 +144,25 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
         }
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell: MusicDetailCell = tableView.cellForRow(at: indexPath) as! MusicDetailCell
+        
         if indexPath.section == 0 {
-            self.showAlert(type: .info, withMessage: "this is \(indexPath.row) row")
+            self.showAlert(
+                type: .info,
+                withMessage: "This API currently is not available to playback the music." )
         } else {
             let track = self.viewModel.localTrackData[indexPath.row]
             self.playMusic(uri: track.uri)
+            self.selectedMusic = indexPath
+            cell.isMusicPlay = true
         }
+    }
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell: MusicDetailCell = tableView.cellForRow(at: indexPath) as! MusicDetailCell
+        self.selectedMusic = nil
+        cell.isMusicPlay = false
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -165,7 +188,7 @@ extension MusicPlayerVC {
         case .error:
             title = "Error"
         case .info:
-            title = "For Your Information"
+            title = "We were sorry"
         }
         let alert = UIAlertController(
             title: title,
@@ -177,6 +200,32 @@ extension MusicPlayerVC {
         
         self.present(alert,
                      animated: true)
+    }
+    
+    private func accessCodePrompt() {
+        let ac = UIAlertController(
+            title: "Access Token Required",
+            message: """
+            Since there is a problem with the API implementation,
+            add the access token manually. Please refer to the developer.
+            After you add the access token, please try to search music again. Thank you.
+        """,
+            preferredStyle: .alert)
+        ac.addTextField{ [weak self] (textField) in
+            guard self != nil else { return }
+            textField.placeholder = "Input Access Code Here"
+            textField.isSecureTextEntry = true
+        }
+        
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned ac] _ in
+            let answer = ac.textFields![0].text
+            self.localStorage.setStorage(key: .accessToken(answer))
+            self.localStorage.setStorage(key: .resetTime(Date.now.toLocalTime()))
+        }
+
+        ac.addAction(submitAction)
+
+        self.present(ac, animated: true)
     }
 }
 
@@ -212,6 +261,8 @@ extension MusicPlayerVC: AVAudioPlayerDelegate, MusicControlViewDelegate {
     
     func playerControl(_ control: PlayerControl) {
         self.musicControlView.midButtonAction(control)
+        self.updateMusicCell(control)
+        
         player.volume = 0.5
         
         switch control {
@@ -221,6 +272,21 @@ extension MusicPlayerVC: AVAudioPlayerDelegate, MusicControlViewDelegate {
             player.pause()
         case .stop:
             player.stop()
+        }
+    }
+    
+    func updateMusicCell(_ control: PlayerControl) {
+        if let indexPath = selectedMusic {
+            let cell: MusicDetailCell = tableView.cellForRow(at: indexPath) as! MusicDetailCell
+            
+            if indexPath.section == 1 {
+                switch control {
+                case .play:
+                    cell.isMusicPlay = true
+                default:
+                    cell.isMusicPlay = false
+                }
+            }
         }
     }
 }
