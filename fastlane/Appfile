@@ -1,0 +1,6 @@
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
+
+app_identifier(ENV['com.musicplayer.MPProject'])
+apple_id("j.delvina@gmail.com")
+team_name ("Personal Team")
