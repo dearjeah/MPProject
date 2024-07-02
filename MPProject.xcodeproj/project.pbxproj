@@ -10,6 +10,7 @@
 		33B8C5677D9BDADE3DF9D4A5 /* Pods_MPProject_MPProjectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97C4C9832EAC92A93F174385 /* Pods_MPProject_MPProjectUITests.framework */; };
 		ADF57FE148E743EF27D97DDC /* Pods_MPProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C58B4CEEDD8AF1D6C8106B97 /* Pods_MPProjectTests.framework */; };
 		B47C4720850109FC3CB85D9A /* Pods_MPProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC950F60AC4716F7B2286029 /* Pods_MPProject.framework */; };
+		BF275F822C345ACE00A2AEB7 /* StubMusicPlayerRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF275F812C345ACE00A2AEB7 /* StubMusicPlayerRepo.swift */; };
 		BFA078E42C32761900EFB538 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA078E32C32761900EFB538 /* AppDelegate.swift */; };
 		BFA078E62C32761900EFB538 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA078E52C32761900EFB538 /* SceneDelegate.swift */; };
 		BFA078EB2C32761900EFB538 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = BFA078EA2C32761900EFB538 /* Base */; };
@@ -78,6 +79,7 @@
 		8CD2809ED3EC5BCB2D714FCB /* Pods-MPProject-MPProjectUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPProject-MPProjectUITests.release.xcconfig"; path = "Target Support Files/Pods-MPProject-MPProjectUITests/Pods-MPProject-MPProjectUITests.release.xcconfig"; sourceTree = "<group>"; };
 		947BA4CC0242F6875FDC015E /* Pods-MPProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPProjectTests.release.xcconfig"; path = "Target Support Files/Pods-MPProjectTests/Pods-MPProjectTests.release.xcconfig"; sourceTree = "<group>"; };
 		97C4C9832EAC92A93F174385 /* Pods_MPProject_MPProjectUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MPProject_MPProjectUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF275F812C345ACE00A2AEB7 /* StubMusicPlayerRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubMusicPlayerRepo.swift; sourceTree = "<group>"; };
 		BFA078E02C32761900EFB538 /* MPProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MPProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFA078E32C32761900EFB538 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFA078E52C32761900EFB538 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				BFA078FA2C32761B00EFB538 /* MPProjectTests.swift */,
+				BF275F812C345ACE00A2AEB7 /* StubMusicPlayerRepo.swift */,
 			);
 			path = MPProjectTests;
 			sourceTree = "<group>";
@@ -707,6 +710,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF275F822C345ACE00A2AEB7 /* StubMusicPlayerRepo.swift in Sources */,
 				BFA078FB2C32761B00EFB538 /* MPProjectTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

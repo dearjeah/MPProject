@@ -131,18 +131,6 @@ extension MusicPlayerVM {
         }
     }
     
-    func checkTimerInterval() {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.hour, .minute]
-        
-        let current = Date.now.toLocalTime()
-        let remainingTime = self.getRemainingResetTime() ?? Date.now.toLocalTime()
-        
-        let difference = formatter.string(from: current, to: remainingTime)?.toDouble ?? 0
-        
-        self.setInterval(difference * 30.0)
-    }
-    
     func getRemainingResetTime() -> Date? {
         if let saved = resetTime {
             let resetTime = Calendar.current.date(
@@ -152,38 +140,5 @@ extension MusicPlayerVM {
             return resetTime
         }
         return nil
-    }
-    
-    private func setInterval(_ interval: Double) {
-        if interval == -1 || interval == 0 {
-            stopTimer()
-        } else if interval != 0 {
-            switch self._viewState {
-            case .error:
-                self.startTimer(withInterval: interval) { [weak self] _ in
-                    self?.requestData()
-                }
-            default:
-                break
-            }
-        }
-    }
-    
-    private func startTimer(
-        withInterval interval: Double,
-        block: @escaping (Timer
-        ) -> Void) {
-        if timer != nil {
-            timer?.invalidate()
-        }
-        timer = Timer.scheduledTimer(
-            withTimeInterval: interval,
-            repeats: true,
-            block: block
-        )
-    }
-    
-    func stopTimer() {
-        timer?.invalidate()
     }
 }

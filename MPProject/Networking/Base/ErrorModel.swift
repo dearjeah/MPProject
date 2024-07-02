@@ -69,3 +69,19 @@ extension Error {
         self as? HttpError ?? HttpError.networkError
     }
 }
+
+public extension HttpError {
+    static func mockError(
+        message: String? = nil,
+        desc: String? = nil,
+        status: Int? = nil
+    ) -> HttpError {
+        let errorBody = ErrorModel(
+            error: true,
+            status: status,
+            message: message,
+            description: desc
+        )
+        return HttpError(errorBody: errorBody)
+    }
+}
