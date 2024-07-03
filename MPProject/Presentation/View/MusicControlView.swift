@@ -94,7 +94,6 @@ class MusicControlView: UIView {
     private func setupEvent() {
         playPauseButton.onClick = { [weak self] in
             guard let self = self else { return }
-            print("mid button click")
             
             switch self.control {
             case .play:

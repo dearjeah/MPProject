@@ -102,6 +102,7 @@ class MusicDetailCell: UITableViewCell {
             musicAnimView
         )
         musicAnimView.isHidden = true
+        isMusicPlay = false
     }
 
     private func setupConstraint() {

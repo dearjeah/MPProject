@@ -140,8 +140,8 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
                            title: track.name,
                            artist: track.artists?[0].name,
                            album: track.album?.name)
+            cell.isMusicPlay = false
             return cell
-            
         } else {
             let track = self.viewModel.localTrackData[indexPath.row]
             
@@ -149,13 +149,17 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
                            title: track.name,
                            artist: track.artists?[0].name,
                            album: track.album?.name)
+            if let selected = selectedMusic,
+               selectedMusic == indexPath {
+                cell.isMusicPlay = true
+            }
             return cell
         }
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell: MusicDetailCell = tableView.cellForRow(at: indexPath) as! MusicDetailCell
+        guard let cell: MusicDetailCell = tableView.cellForRow(at: indexPath) as? MusicDetailCell else { return }
         
         if indexPath.section == 0 {
             self.showAlert(
@@ -163,13 +167,15 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
                 withMessage: "This API currently is not available to playback the music." )
         } else {
             let track = self.viewModel.localTrackData[indexPath.row]
+            
             self.playMusic(uri: track.uri)
             self.selectedMusic = indexPath
             cell.isMusicPlay = true
         }
     }
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell: MusicDetailCell = tableView.cellForRow(at: indexPath) as! MusicDetailCell
+        guard let cell: MusicDetailCell = tableView.cellForRow(at: indexPath) as? MusicDetailCell else { return }
+        
         self.selectedMusic = nil
         cell.isMusicPlay = false
     }
