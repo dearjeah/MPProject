@@ -61,7 +61,7 @@ more info: https://api.spotify.com/
 - Architecture: MVVM
 - Supporting patter: Singleton
 - CI/CD: Fastlane Firebase
-=========== PODS ============
+- =========== PODS ============
 - Layout: Snapkit
 - Networking: Alamofire, SDwebImage, Kingfisher
 - Debugging: FLEX, netfox
