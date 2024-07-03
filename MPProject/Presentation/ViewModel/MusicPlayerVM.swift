@@ -135,7 +135,7 @@ extension MusicPlayerVM {
         if let saved = resetTime {
             let resetTime = Calendar.current.date(
                 byAdding: .minute,
-                value: 30,
+                value: 45,
                 to: saved)!
             return resetTime
         }
