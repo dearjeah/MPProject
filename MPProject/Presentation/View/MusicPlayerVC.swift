@@ -19,6 +19,7 @@ class MusicPlayerVC: UIViewController {
     
     private enum AlertType {
         case error
+        case sorry
         case info
     }
     
@@ -150,7 +151,7 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
                            artist: track.artists?[0].name,
                            album: track.album?.name)
             if let selected = selectedMusic,
-               selectedMusic == indexPath {
+               selected == indexPath {
                 cell.isMusicPlay = true
             }
             return cell
@@ -163,8 +164,12 @@ extension MusicPlayerVC: UITableViewDataSource ,UITableViewDelegate {
         
         if indexPath.section == 0 {
             self.showAlert(
-                type: .info,
+                type: .sorry,
                 withMessage: "This API currently is not available to playback the music." )
+            
+            self.selectedMusic = nil
+            self.playMusic(uri: nil)
+            cell.isMusicPlay = false
         } else {
             let track = self.viewModel.localTrackData[indexPath.row]
             
@@ -202,8 +207,10 @@ extension MusicPlayerVC {
         switch type {
         case .error:
             title = "Error"
-        case .info:
+        case .sorry:
             title = "We were sorry"
+        case .info:
+            title = "Select song"
         }
         let alert = UIAlertController(
             title: title,
@@ -254,7 +261,14 @@ extension MusicPlayerVC {
 extension MusicPlayerVC: AVAudioPlayerDelegate, MusicControlViewDelegate {
     // delegate Music Control View
     func didMidButtonChange(_ control: PlayerControl) {
-        self.playerControl(control)
+        if control == .stop {
+            self.showAlert(
+                type: .info,
+                withMessage: "Please select local song to play"
+            )
+        } else {
+            self.playerControl(control)
+        }
     }
     
     func playMusic(uri: String?) {
@@ -277,6 +291,8 @@ extension MusicPlayerVC: AVAudioPlayerDelegate, MusicControlViewDelegate {
             catch {
                 print("error occurred")
             }
+        } else {
+            self.playerControl(.stop)
         }
     }
     

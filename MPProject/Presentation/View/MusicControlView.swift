@@ -20,12 +20,10 @@ protocol MusicControlViewDelegate: AnyObject {
 }
 
 class MusicControlView: UIView {
-    var control: PlayerControl = .pause
+    var control: PlayerControl = .stop
     
     weak var delegate: MusicControlViewDelegate?
     
-   
-
     private lazy var previousButton: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(systemName: "backward.fill")
@@ -36,7 +34,7 @@ class MusicControlView: UIView {
     
     private lazy var playPauseButton: UIImageView = {
         let image = UIImageView()
-        image.image = UIImage(systemName: "play.circle.fill")
+        image.image = UIImage(systemName: "stop.circle.fill")
         image.contentMode = .scaleAspectFit
         image.tintColor = .black
         return image
@@ -101,7 +99,7 @@ class MusicControlView: UIView {
             case .pause:
                 delegate?.didMidButtonChange(.play)
             case .stop:
-                delegate?.didMidButtonChange(.play)
+                delegate?.didMidButtonChange(.stop)
             }
         }
     }
